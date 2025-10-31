@@ -20,11 +20,20 @@ docker compose down
 Verify the Load Balancer
 ------------------------
 
-Hit the Nginx endpoint repeatedly to see different container hostnames in the response.
+Hit the Nginx endpoint repeatedly to see different container hostnames in the HTML response.
 
 ```bash
 curl -i http://localhost:8080/
 curl -i http://localhost:8080/  # repeat as needed
+```
+
+Check the JSON Health Endpoint
+------------------------------
+
+Fetch `/status.php` to retrieve the container hostname plus the live database status as JSON (HTTP 503 on failure).
+
+```bash
+curl http://localhost:8080/status.php | jq
 ```
 
 Check Each PHP Container Directly
