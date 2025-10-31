@@ -36,6 +36,17 @@ Fetch `/status.php` to retrieve the container hostname plus the live database st
 curl http://localhost:8080/status.php | jq
 ```
 
+Run Locally Without Docker
+--------------------------
+
+You can also serve the app with PHP's built-in server and try the API endpoint directly.
+
+```bash
+php -S localhost:8000
+# then in another terminal
+curl http://localhost:8000/app/api.php
+```
+
 Check Each PHP Container Directly
 ---------------------------------
 
