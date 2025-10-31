@@ -1,0 +1,73 @@
+version: '3.8'
+
+services:
+  # 1. PostgreSQL (Banco de Dados)
+  postgres_db:
+    image: postgres:16
+    container_name: postgres_db
+    restart: always
+    environment:
+      # Variáveis de ambiente para o PostgreSQL
+      POSTGRES_DB: mydatabase
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+    volumes:
+      # Persistência dos dados (os dados não serão perdidos ao derrubar os contêineres)
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+  # 2. Contêiner PHP da Aplicação (Instância 1)
+  php-app-1:
+    # Usa o Dockerfile criado para instalar o driver pdo_pgsql
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: php-app-1
+    volumes:
+      - ./app:/var/www/html/public
+    ports:
+      - "9001:9000"      
+    # Espera que o banco de dados esteja pronto
+    depends_on:
+      - postgres_db 
+    networks:
+      - app-network
+
+  # 3. Contêiner PHP da Aplicação (Instância 2)
+  php-app-2:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: php-app-2
+    volumes:
+      - ./app:/var/www/html/public
+    ports:
+      - "9002:9000"
+    depends_on:
+      - postgres_db
+    networks:
+      - app-network
+
+  # 4. Servidor Load Balancer/Web (Nginx)
+  nginx-lb:
+    image: nginx:latest
+    container_name: nginx-lb
+    volumes:
+      - ./app:/var/www/html/public:ro
+      - ./nginx/conf.d/app.conf:/etc/nginx/conf.d/default.conf:ro
+    ports:
+      - "8080:80"
+    depends_on:
+      - php-app-1
+      - php-app-2
+    networks:
+      - app-network
+
+# Redes e Volumes
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  postgres-data: # Volume para persistir os dados do PostgreSQL
