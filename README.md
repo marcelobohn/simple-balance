@@ -30,10 +30,10 @@ curl -i http://localhost:8080/  # repeat as needed
 Check the JSON Health Endpoint
 ------------------------------
 
-Fetch `/status.php` to retrieve the container hostname plus the live database status as JSON (HTTP 503 on failure).
+Fetch `/api.php` to retrieve the container hostname plus the live database status as JSON (HTTP 503 on failure).
 
 ```bash
-curl http://localhost:8080/status.php | jq
+curl http://localhost:8080/api.php | jq
 ```
 
 Run Locally Without Docker

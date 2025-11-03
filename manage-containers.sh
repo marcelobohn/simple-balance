@@ -1,4 +1,10 @@
 #!/usr/bin/env bash
+
+# Ensure we run under bash even if invoked with `sh`
+if [ -z "${BASH_VERSION:-}" ]; then
+  exec bash "$0" "$@"
+fi
+
 set -euo pipefail
 
 cmd=${1:-}
