@@ -47,13 +47,6 @@ php -S localhost:8000
 curl http://localhost:8000/app/api.php
 ```
 
-Check Each PHP Container Directly
----------------------------------
-
-```bash
-curl -i http://localhost:9001/
-curl -i http://localhost:9002/
-```
 
 Tail Nginx Logs (optional)
 --------------------------
